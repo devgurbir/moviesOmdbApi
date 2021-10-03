@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .container {
+            width: 60%;
+            margin: 20px auto;
+            padding: 20px;
+            
+        }
+
+        .input {
+            width: 80%;
+            margin: 0 auto;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            font-size: 16px;
+            border: 1px solid #cac5c5;
+            padding:30px;
+        }
+
+        
+        .input > input {
+            flex: 1 1 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            box-shadow: 1px 1px #ccc;
+        }
+
+        .input > button {
+            margin-top: 20px;
+            flex: 1;
+            background-color: #00a4e4;
+            padding: 10px;
+            color: white;
+            border: 1px solid #ccc;
+            box-shadow: 1px 1px #ccc;
+        }
+
+        .movieContainer {
+            width: 80%;
+            margin: 20px auto;
+            display:flex;
+            gap: 10px;
+            border: 1px solid #cac5c5;
+            padding: 30px; 
+            /* flex-direction: column;            */
+        }
+
+        .movieContainer > div {
+            flex: 1 1 100%;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="input">
+            <input type="text" name='movieName' placeholder="Enter movie name"/>
+            <button id='search'>Search</button>            
+        </div>
+        <div class="movieContainer">
+            <div class="left"></div>
+            <div class="right"></div>
+
+        </div>
+    </div>
+    
+    <script>
+        const api_key = '2b096784';
+        const movieInput = document.querySelector("input[name='movieName']");
+        const searchBtn = document.getElementById('search')
+
+
+        searchBtn.addEventListener('click', function(){            
+            const movieName = movieInput.value;
+            movieInput.value = '';
+
+            if(!movieName){
+                alert('Please enter a valid movie name');
+                return;
+            }
+
+            let apiCall = `http://www.omdbapi.com/?apikey=${api_key}&`
+            apiCall += `&t=${movieName}`
+            
+            fetch(apiCall)
+            .then(function(response){
+                return response.json()
+            })
+            .then(function(response){
+                addMovieData(response);
+            })
+            .catch(function(error){
+                console.log(error)
+            })
+        })
+
+        function addMovieData(data){
+            const parent = document.querySelector('.movieContainer');
+            
+
+            const left = document.querySelector('.left');
+            left.innerHTML = ''
+            const right = document.querySelector('.right');
+            right.innerHTML = ''
+
+            // Movie Title
+            const movieTitle = document.createElement('h2');
+            movieTitle.textContent = data.Title;
+            movieTitle.setAttribute('id', 'movieTitle')
+
+            // Genre
+            const genre = document.createElement('p');
+            genre.textContent = 'Genre: ' + data.Genre;
+            genre.setAttribute('id', 'genre')
+
+            // Director
+            const director = document.createElement('p');
+            director.textContent = 'Directed By: ' + data.Director;
+            director.setAttribute('id', 'director')
+
+            // plot
+            const plot = document.createElement('p');
+            plot.textContent = data.Plot;
+            plot.setAttribute('id', 'plot')
+
+            // Actors
+            const actors = document.createElement('p');
+            actors.textContent = 'Actors: ' + data.Actors;
+
+            // Released
+            const releaseDate = document.createElement('p');
+            releaseDate.textContent = 'Release Date: ' +  data.Released;
+
+            //  imdbRating
+            const imdbRating = document.createElement('p');
+            imdbRating.textContent = 'IMDb Rating: ' + data.imdbRating;
+            imdbRating.setAttribute('id', 'imdbRating')
+
+            //  imdbRating
+            const poster = document.createElement('img');
+
+            // poster.className = 'image';
+            // const poster = document.querySelector('.left')
+
+            poster.src = data.Poster;
+            // poster.style.backgroundRepeat = 'no-repeat';
+            // poster.style.backgroundSize = 'cover';
+            // poster.style.backgroundPosition = 'center'
+            // poster.style.height = '445px';
+            // poster.style.width = 350;
+              
+            
+            left.append(poster)
+            right.append(movieTitle, genre, director, actors, imdbRating, plot)
+        }
+
+    </script>
+</body>
+</html>
