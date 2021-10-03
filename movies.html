@@ -55,6 +55,12 @@
         .movieContainer > div {
             flex: 1 1 100%;
         }
+
+        .recommended {
+            padding: 10px;
+            background-color: yellow;
+            font-weight: 800;
+        }
     </style>
 </head>
 <body>
@@ -130,8 +136,7 @@
         }
 
         function addMovieData(data){
-            const parent = document.querySelector('.movieContainer');
-            
+            const parent = document.querySelector('.movieContainer');            
 
             const left = document.querySelector('.left');
             left.innerHTML = ''
@@ -142,6 +147,8 @@
             const movieTitle = document.createElement('h2');
             movieTitle.textContent = data.Title;
             movieTitle.setAttribute('id', 'movieTitle')
+
+            
 
             // Genre
             const genre = document.createElement('p');
@@ -170,6 +177,7 @@
             const imdbRating = document.createElement('p');
             imdbRating.textContent = 'IMDb Rating: ' + data.imdbRating;
             imdbRating.setAttribute('id', 'imdbRating')
+            
 
             //  imdbRating
             const poster = document.createElement('img');
@@ -186,7 +194,17 @@
               
             
             left.append(poster)
-            right.append(movieTitle, genre, director, actors, imdbRating, plot)
+
+            if(data.imdbRating >= 8.5){
+                const recommended = document.createElement('span');
+                recommended.textContent = 'Recommended'
+                recommended.className = 'recommended'
+                right.append(movieTitle, recommended, genre, director, actors, imdbRating, plot)
+            }
+            else{
+                right.append(movieTitle, genre, director, actors, imdbRating, plot)
+            }
+            
         }
 
     </script>
