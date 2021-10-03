@@ -93,12 +93,41 @@
                 return response.json()
             })
             .then(function(response){
+                
+                if(response.Response == 'False'){
+                    // console.log('bikbikiak')
+                    movieNotFound();
+                    return;
+                }
                 addMovieData(response);
             })
             .catch(function(error){
                 console.log(error)
             })
         })
+
+        function movieNotFound(){
+            
+            const left = document.querySelector('.left');
+            left.innerHTML = ''
+            const right = document.querySelector('.right');
+            right.innerHTML = ''
+
+            const heading = document.createElement('h3');
+            heading.textContent = 'Movie not found'
+
+            const errorMsg = document.createElement('p');
+            errorMsg.textContent = "Sorry, it looks like the movie you were searching for does not exist. Please try searching again."
+
+            const img = document.createElement('img')
+            img.src = 'https://www.publicdomainpictures.net/pictures/280000/velka/not-found-image-15383864787lu.jpg'
+            img.height = 200
+            img.width = 300
+
+            left.append(img)
+            right.append(heading, errorMsg)
+            
+        }
 
         function addMovieData(data){
             const parent = document.querySelector('.movieContainer');
